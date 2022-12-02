@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 
-function d1p1(input: string) {
+function totalCaloriesPerElfDesc(input: string): number[] {
   return input
     .split('\n')
     .reduce((acc, cur) => {
@@ -14,9 +14,25 @@ function d1p1(input: string) {
         : [parseInt(cur, 10)];
     }, [] as number[])
     .sort((a, b) => a - b)
-    .reverse()[0];
+    .reverse();
 }
+
+function d1p1(input: string) {
+  return totalCaloriesPerElfDesc(input)[0];
+}
+
+function d1p2(input: string) {
+  return totalCaloriesPerElfDesc(input)
+    .slice(0, 3)
+    .reduce((n1, n2) => n1 + n2);
+}
+
+const input: string = readFileSync('src/d1/input.txt', { encoding: 'utf-8' });
 
 // Day 1, part 1
 // 67658
-console.log(d1p1(readFileSync('src/d1/input.txt', { encoding: 'utf-8' })));
+console.log(d1p1(input));
+
+// Day 1, part 2
+// 200158
+console.log(d1p2(input));
