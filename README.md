@@ -4,5 +4,5 @@
 
 ## Languages
 
-- Typescript
-- Roc
+- [Typescript](https://www.typescriptlang.org/)
+- [Roc](https://www.roc-lang.org/)
