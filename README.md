@@ -4,10 +4,5 @@
 
 ## Languages
 
-### Typescript
-
-[ [D1](ts/src/d1/main.ts) ]
-
-### Elm
-
-[ [D1](elm/d1/Main.elm) ]
+- Typescript: [ [D1](ts/src/d1/main.ts) ]
+- Elm: [ [D1](elm/d1/Main.elm) ]
