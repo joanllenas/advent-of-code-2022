@@ -4,5 +4,10 @@
 
 ## Languages
 
-- [Typescript](https://www.typescriptlang.org/)
-- [Elm](https://elm-lang.org/)
+### Typescript
+
+[ [D1](ts/src/d1/main.ts) ]
+
+### Elm
+
+[ [D1](elm/d1/Main.elm) ]
