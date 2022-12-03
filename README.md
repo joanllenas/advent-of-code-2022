@@ -5,4 +5,4 @@
 ## Languages
 
 - [Typescript](https://www.typescriptlang.org/)
-- [Roc](https://www.roc-lang.org/)
+- [Elm](https://elm-lang.org/)

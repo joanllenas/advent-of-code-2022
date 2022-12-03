@@ -1,0 +1,13 @@
+{
+  "name": "elm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pred1": "elm make --optimize d1/Main.elm --output=d1/main.js",
+    "d1": "node d1/cli.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
