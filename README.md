@@ -4,5 +4,5 @@
 
 ## Languages
 
-- Typescript: [ [D1](ts/src/d1/main.ts) ]
+- Typescript: [ [D1](ts/src/d1/main.ts), [D2](ts/src/d2/main.ts) ]
 - Elm: [ [D1](elm/d1/Main.elm) ]

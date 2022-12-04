@@ -66,7 +66,7 @@ day1p1 input =
 
 
 
--- Day 1, part 1
+-- part 1
 -- 67658
 
 
@@ -80,7 +80,7 @@ day1p2 input =
 
 
 
--- Day 1, part 2
+-- part 2
 -- 200158
 
 
