@@ -1,37 +1,33 @@
 import { readFileSync } from 'fs';
 
-const points = {
-  movements: {
-    rock: 1,
-    paper: 2,
-    scissors: 3,
-  },
-  outcome: {
-    loose: 0,
-    draw: 3,
-    win: 6,
-  },
+type Mov = 'rock' | 'paper' | 'scissors';
+const movs: Mov[] = ['rock', 'paper', 'scissors'];
+const movPoints = (mov: Mov) => [1, 2, 3][movIndex(mov)];
+const movIndex = (mov: Mov) => movs.indexOf(mov);
+const prevMovIndex = (index: number) =>
+  index === 0 ? movs.length - 1 : index - 1;
+const nextMovIndex = (index: number) =>
+  index === movs.length - 1 ? 0 : index + 1;
+const winnerMov = (mov: Mov) => movs[nextMovIndex(movIndex(mov))];
+const looserMov = (mov: Mov) => movs[prevMovIndex(movIndex(mov))];
+
+const outcomePoints = {
+  loose: 0,
+  draw: 3,
+  win: 6,
 };
 
-type Movement = keyof typeof points.movements;
-type Outcome = keyof typeof points.outcome;
+type Outcome = keyof typeof outcomePoints;
 
-const oppoMovDict: Record<string, Movement> = {
+const oppoMovDict: Record<string, Mov> = {
   A: 'rock',
   B: 'paper',
   C: 'scissors',
 };
 
-// { <winner key>: <looser key> }
-const winLooseMovMap: Record<Movement, Movement> = {
-  rock: 'scissors',
-  paper: 'rock',
-  scissors: 'paper',
-};
-
 // part 1
 function d1p1(input: string) {
-  const myMovDict: Record<string, Movement> = {
+  const myMovDict: Record<string, Mov> = {
     X: 'rock',
     Y: 'paper',
     Z: 'scissors',
@@ -44,37 +40,27 @@ function d1p1(input: string) {
     const myMovement = myMovDict[myLetter];
     const oppoMovement = oppoMovDict[oppoLetter];
     let gamePoints = 0;
-    if (points.movements[myMovement] - points.movements[oppoMovement] === 0) {
-      gamePoints = points.outcome.draw;
-    } else if (
-      (myMovement === 'rock' && oppoMovement === winLooseMovMap['rock']) ||
-      (myMovement === 'paper' && oppoMovement === winLooseMovMap['paper']) ||
-      (myMovement === 'scissors' && oppoMovement === winLooseMovMap['scissors'])
-    ) {
-      gamePoints = points.outcome.win;
+    if (movPoints(myMovement) - movPoints(oppoMovement) === 0) {
+      gamePoints = outcomePoints.draw;
+    } else if (winnerMov(oppoMovement) === myMovement) {
+      gamePoints = outcomePoints.win;
     } else {
-      gamePoints = points.outcome.loose;
+      gamePoints = outcomePoints.loose;
     }
 
-    return acc + gamePoints + points.movements[myMovement];
+    return acc + gamePoints + movPoints(myMovement);
   }, 0);
 }
 
 // part 2
 function d1p2(input: string) {
-  // { <looser key>: <winner key> }
-  const looseWinMovMap: Record<Movement, Movement> = {
-    rock: 'paper',
-    paper: 'scissors',
-    scissors: 'rock',
-  };
   const myMovDict: Record<
     string,
-    (oppoMov: Movement) => { o: Outcome; myMov: Movement }
+    (oppoMov: Mov) => { o: Outcome; myMov: Mov }
   > = {
-    X: (oppoMov) => ({ o: 'loose', myMov: winLooseMovMap[oppoMov] }),
+    X: (oppoMov) => ({ o: 'loose', myMov: looserMov(oppoMov) }),
     Y: (oppoMov) => ({ o: 'draw', myMov: oppoMov }),
-    Z: (oppoMov) => ({ o: 'win', myMov: looseWinMovMap[oppoMov] }),
+    Z: (oppoMov) => ({ o: 'win', myMov: winnerMov(oppoMov) }),
   };
   return input.split('\n').reduce((acc, cur) => {
     const [oppoLetter, myLetter] = cur.split(' ') as [
@@ -83,8 +69,8 @@ function d1p2(input: string) {
     ];
     const oppoMovement = oppoMovDict[oppoLetter];
     const myMovement = myMovDict[myLetter](oppoMovement);
-    let gamePoints = points.outcome[myMovement.o];
-    return acc + gamePoints + points.movements[myMovement.myMov];
+    let gamePoints = outcomePoints[myMovement.o];
+    return acc + gamePoints + movPoints(myMovement.myMov);
   }, 0);
 }
 
