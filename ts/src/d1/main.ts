@@ -27,12 +27,14 @@ function d1p2(input: string) {
     .reduce((n1, n2) => n1 + n2);
 }
 
-const input: string = readFileSync('src/d1/input.txt', { encoding: 'utf-8' });
+const input: string = readFileSync(__dirname + '/input.txt', {
+  encoding: 'utf-8',
+});
 
-// Day 1, part 1
+// part 1
 // 67658
 console.log(d1p1(input));
 
-// Day 1, part 2
+// part 2
 // 200158
 console.log(d1p2(input));

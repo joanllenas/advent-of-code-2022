@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "d1": "npx ts-node src/d1/main.ts"
+    "d1": "npx ts-node src/d1/main.ts",
+    "d2": "npx ts-node src/d2/main.ts"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
