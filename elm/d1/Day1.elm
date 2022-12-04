@@ -1,4 +1,4 @@
-port module Main exposing (main)
+port module Day1 exposing (main)
 
 import Platform exposing (Program)
 

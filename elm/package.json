@@ -4,10 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pred1": "elm make --optimize d1/Main.elm --output=d1/main.js",
-    "d1": "node d1/cli.js"
+    "pred1": "elm make d1/Day1.elm --output=d1/main.js",
+    "d1": "node d1/cli.js",
+    "pred2": "elm make d2/Day2.elm --output=d2/main.js",
+    "d2": "node d2/cli.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "elm": "^0.19.1-5",
+    "elm-format": "^0.8.5",
+    "elm-test": "^0.19.1-revision10"
+  }
 }

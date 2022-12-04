@@ -1,6 +1,6 @@
 {
   "type": "application",
-  "source-directories": ["d1"],
+  "source-directories": ["d1", "d2"],
   "elm-version": "0.19.1",
   "dependencies": {
     "direct": {
