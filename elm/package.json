@@ -7,7 +7,9 @@
     "pred1": "elm make d1/Day1.elm --output=d1/main.js",
     "d1": "node d1/cli.js",
     "pred2": "elm make d2/Day2.elm --output=d2/main.js",
-    "d2": "node d2/cli.js"
+    "d2": "node d2/cli.js",
+    "pred4": "elm make d4/Day4.elm --output=d4/main.js",
+    "d4": "node d4/cli.js"
   },
   "keywords": [],
   "author": "",
