@@ -17,11 +17,11 @@ function totalCaloriesPerElfDesc(input: string): number[] {
     .reverse();
 }
 
-function d1p1(input: string) {
+function p1(input: string) {
   return totalCaloriesPerElfDesc(input)[0];
 }
 
-function d1p2(input: string) {
+function p2(input: string) {
   return totalCaloriesPerElfDesc(input)
     .slice(0, 3)
     .reduce((n1, n2) => n1 + n2);
@@ -33,8 +33,8 @@ const input: string = readFileSync(__dirname + '/input.txt', {
 
 // part 1
 // 67658
-console.log(d1p1(input));
+console.log(p1(input));
 
 // part 2
 // 200158
-console.log(d1p2(input));
+console.log(p2(input));

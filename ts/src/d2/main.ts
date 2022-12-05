@@ -26,7 +26,7 @@ const oppoMovDict: Record<string, Mov> = {
 };
 
 // part 1
-function d1p1(input: string) {
+function p1(input: string) {
   const myMovDict: Record<string, Mov> = {
     X: 'rock',
     Y: 'paper',
@@ -53,7 +53,7 @@ function d1p1(input: string) {
 }
 
 // part 2
-function d1p2(input: string) {
+function p2(input: string) {
   const myMovDict: Record<
     string,
     (oppoMov: Mov) => { o: Outcome; myMov: Mov }
@@ -81,8 +81,8 @@ const input: string = readFileSync(__dirname + '/input.txt', {
 
 // part 1
 // 14375
-console.log(d1p1(input));
+console.log(p1(input));
 
 // part 2
 // 10274
-console.log(d1p2(input));
+console.log(p2(input));
