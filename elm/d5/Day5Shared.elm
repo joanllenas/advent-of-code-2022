@@ -1,4 +1,4 @@
-module Day5Shared exposing (Crate(..), parseCrates)
+module Day5Shared exposing (Crate(..), Operation(..), Program(..), parseProgram)
 
 import Parser as P
     exposing
@@ -15,18 +15,29 @@ type Crate
     = Crate { rowIndex : Int, colIndex : Int } String
 
 
-cratesParser : Parser (List Crate)
-cratesParser =
-    P.loop []
-        (\links ->
+type Operation
+    = Op { amount : Int, fromCol : Int, toCol : Int }
+
+
+type Program
+    = Prg (List Crate) (List Operation)
+
+
+programParser : Parser Program
+programParser =
+    P.loop (Prg [] [])
+        (\((Prg crates ops) as prg) ->
             P.oneOf
-                [ P.succeed (\link -> link :: links)
+                [ P.succeed (\crate -> Prg (crate :: crates) ops)
                     |= crateParser
                     |> P.map Loop
-                , P.succeed links
+                , P.succeed (\op -> Prg crates (op :: ops))
+                    |= operationParser
+                    |> P.map Loop
+                , P.succeed prg
                     |. P.chompIf (always True)
                     |> P.map Loop
-                , P.succeed (List.reverse links)
+                , P.succeed (Prg (List.reverse crates) (List.reverse ops))
                     |. P.end
                     |> P.map Done
                 ]
@@ -42,6 +53,17 @@ crateParser =
         |. P.symbol "]"
 
 
-parseCrates : String -> Result (List DeadEnd) (List Crate)
-parseCrates input =
-    P.run cratesParser input
+operationParser : Parser Operation
+operationParser =
+    P.succeed (\amount from to -> Op { amount = amount, fromCol = from, toCol = to })
+        |. P.token "move "
+        |= P.int
+        |. P.token " from "
+        |= P.int
+        |. P.token " to "
+        |= P.int
+
+
+parseProgram : String -> Result (List DeadEnd) Program
+parseProgram input =
+    P.run programParser input
