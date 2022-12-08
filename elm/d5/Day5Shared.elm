@@ -1,4 +1,4 @@
-module Day5Shared exposing (crateToString, parseCrates)
+module Day5Shared exposing (Crate(..), parseCrates)
 
 import Parser as P
     exposing
@@ -7,6 +7,7 @@ import Parser as P
         , DeadEnd
         , Parser
         , Step(..)
+        , Trailing(..)
         )
 
 
@@ -14,46 +15,33 @@ type Crate
     = Crate { rowIndex : Int, colIndex : Int } String
 
 
-cratesRowParser : Parser (List Crate)
-cratesRowParser =
-    P.loop [] cratesRowParserHelp
+cratesParser : Parser (List Crate)
+cratesParser =
+    P.loop []
+        (\links ->
+            P.oneOf
+                [ P.succeed (\link -> link :: links)
+                    |= crateParser
+                    |> P.map Loop
+                , P.succeed links
+                    |. P.chompIf (always True)
+                    |> P.map Loop
+                , P.succeed (List.reverse links)
+                    |. P.end
+                    |> P.map Done
+                ]
+        )
 
 
-cratesRowParserHelp : List Crate -> Parser (Step (List Crate) (List Crate))
-cratesRowParserHelp crates =
-    P.oneOf
-        [ P.succeed
-            (\( row, col ) letter ->
-                Loop (Crate { rowIndex = row - 1, colIndex = (col - 1) // 4 } letter :: crates)
-            )
-            |= P.getPosition
-            |= crateParser
-        , P.succeed (Done (List.reverse crates))
-            |. P.token "\n"
-        , whitespace |> P.map (\_ -> Loop crates)
-        ]
-
-
-crateParser : Parser String
+crateParser : Parser Crate
 crateParser =
-    P.succeed identity
+    P.succeed (\( row, col ) letter -> Crate { rowIndex = row - 1, colIndex = (col - 1) // 4 } letter)
+        |= P.getPosition
         |. P.symbol "["
-        |. whitespace
         |= (P.getChompedString <| P.chompIf Char.isUpper)
-        |. whitespace
         |. P.symbol "]"
-
-
-whitespace : Parser ()
-whitespace =
-    P.chompWhile ((==) ' ')
 
 
 parseCrates : String -> Result (List DeadEnd) (List Crate)
 parseCrates input =
-    P.run cratesRowParser input
-
-
-crateToString : Crate -> String
-crateToString (Crate { rowIndex, colIndex } letter) =
-    String.join "" [ "row:", String.fromInt rowIndex, ", col:", String.fromInt colIndex, ") ", letter ]
+    P.run cratesParser input
