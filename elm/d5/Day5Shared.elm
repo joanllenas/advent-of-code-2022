@@ -1,5 +1,6 @@
 module Day5Shared exposing (Crate(..), Operation(..), Program(..), parseProgram)
 
+import Array exposing (Array)
 import Parser as P
     exposing
         ( (|.)
@@ -20,15 +21,15 @@ type Operation
 
 
 type Program
-    = Prg (List Crate) (List Operation)
+    = Prg (Array Crate) (List Operation)
 
 
 programParser : Parser Program
 programParser =
-    P.loop (Prg [] [])
+    P.loop (Prg Array.empty [])
         (\((Prg crates ops) as prg) ->
             P.oneOf
-                [ P.succeed (\crate -> Prg (crate :: crates) ops)
+                [ P.succeed (\crate -> Prg (Array.push crate crates) ops)
                     |= crateParser
                     |> P.map Loop
                 , P.succeed (\op -> Prg crates (op :: ops))
@@ -37,7 +38,7 @@ programParser =
                 , P.succeed prg
                     |. P.chompIf (always True)
                     |> P.map Loop
-                , P.succeed (Prg (List.reverse crates) (List.reverse ops))
+                , P.succeed (Prg crates (List.reverse ops))
                     |. P.end
                     |> P.map Done
                 ]
