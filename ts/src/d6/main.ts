@@ -1,22 +1,31 @@
 import { readFileSync } from 'fs';
 
-// part 1
-function p1(input: string) {
+const findPacketMarkerPosition = (
+  input: string,
+  distinctChars: number,
+): number => {
   const index = input.split('').reduce((acc, _, index, arr) => {
     if (acc > -1) {
       return acc;
-    } else if (new Set(arr.slice(index, index + 4)).size === 4) {
+    } else if (
+      new Set(arr.slice(index, index + distinctChars)).size === distinctChars
+    ) {
       return index;
     } else {
       return -1;
     }
   }, -1);
-  return index + 4;
+  return index + distinctChars;
+};
+
+// part 1
+function p1(input: string) {
+  return findPacketMarkerPosition(input, 4);
 }
 
 // part 2
 function p2(input: string) {
-  return '--';
+  return findPacketMarkerPosition(input, 14);
 }
 
 // run
@@ -29,5 +38,5 @@ const input: string = readFileSync(__dirname + '/input.txt', {
 console.log(p1(input));
 
 // part 2
-// ??
+// 2789
 console.log(p2(input));
