@@ -65,7 +65,7 @@ fileListParser =
                 [ P.succeed (\file -> file :: files)
                     |= fileParser
                     |> P.map Loop
-                , P.succeed files
+                , P.succeed (List.reverse files)
                     |> P.map Done
                 ]
         )
@@ -77,10 +77,12 @@ fileParser =
         [ P.succeed Dir
             |. P.token "dir "
             |= (P.getChompedString <| P.chompWhile Char.isAlpha)
+            |. P.spaces
         , P.succeed (\size name -> File name size)
             |= P.int
             |. P.token " "
             |= (P.getChompedString <| P.chompWhile (\ch -> Char.isAlpha ch || ch == '.'))
+            |. P.spaces
         ]
 
 
