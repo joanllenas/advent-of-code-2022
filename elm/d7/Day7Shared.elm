@@ -1,15 +1,12 @@
-module Day7Shared exposing (parseCommands)
+module Day7Shared exposing (File(..), buildFileSystem, parseCommands)
 
+import Dict exposing (Dict)
 import Parser as P exposing ((|.), (|=), DeadEnd, Parser, Step(..))
 
 
 type File
     = File String Int
     | Dir String
-
-
-
--- type FileSystem = File String Int | Dir String (List FileSystem)
 
 
 type CdParam
@@ -108,3 +105,30 @@ cdParamParser =
 parseCommands : String -> Result (List DeadEnd) (List Command)
 parseCommands input =
     P.run cmdsParser input
+
+
+buildFileSystem : List Command -> Dict String (List File)
+buildFileSystem cmds =
+    let
+        buildFileSystem_ : Command -> ( Dict String (List File), List String ) -> ( Dict String (List File), List String )
+        buildFileSystem_ cmd ( dict, path ) =
+            case cmd of
+                Cd CdRoot ->
+                    ( dict, [ "root" ] )
+
+                Cd CdUp ->
+                    ( dict, List.take (List.length path - 1) path )
+
+                Cd (CdTo dirName) ->
+                    ( dict, path ++ [ dirName ] )
+
+                Ls files ->
+                    let
+                        fullpath =
+                            String.join "/" path
+                    in
+                    ( Dict.insert fullpath files dict, path )
+    in
+    cmds
+        |> List.foldl buildFileSystem_ ( Dict.empty, [] )
+        |> Tuple.first
