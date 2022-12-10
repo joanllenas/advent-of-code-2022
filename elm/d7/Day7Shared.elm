@@ -1,4 +1,4 @@
-module Day7Shared exposing (File(..), buildFileSystem, parseCommands)
+module Day7Shared exposing (File(..), buildFileSystem, calculateDirSizes, parseCommands)
 
 import Dict exposing (Dict)
 import Parser as P exposing ((|.), (|=), DeadEnd, Parser, Step(..))
@@ -132,3 +132,41 @@ buildFileSystem cmds =
     cmds
         |> List.foldl buildFileSystem_ ( Dict.empty, [] )
         |> Tuple.first
+
+
+calculateDirSizes : Dict String (List File) -> Dict String Int
+calculateDirSizes directoryDict =
+    let
+        totalFilesSize : List File -> Int
+        totalFilesSize files =
+            List.foldl
+                (\file acc ->
+                    case file of
+                        File _ size ->
+                            size + acc
+
+                        _ ->
+                            acc
+                )
+                0
+                files
+
+        calculateDirSizes_ : String -> List File -> Dict String Int -> Dict String Int
+        calculateDirSizes_ dirPath files dirSizesDict =
+            Dict.insert dirPath (totalFilesSize files) dirSizesDict
+
+        flattenDirSizes : String -> Dict String Int -> Int
+        flattenDirSizes dirPath dict =
+            dict
+                |> Dict.filter
+                    (\path _ ->
+                        String.length path
+                            > String.length dirPath
+                            && String.left (String.length dirPath) path
+                            == dirPath
+                    )
+                |> Dict.toList
+                |> List.foldl (\( _, v ) size -> size + v) 0
+    in
+    Dict.foldl calculateDirSizes_ Dict.empty directoryDict
+        |> (\dict -> Dict.map (\path size -> size + flattenDirSizes path dict) dict)
