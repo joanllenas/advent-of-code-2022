@@ -3,7 +3,8 @@
     "d1": "npx ts-node src/d1/main.ts",
     "d2": "npx ts-node src/d2/main.ts",
     "d3": "npx ts-node src/d3/main.ts",
-    "d6": "npx ts-node src/d6/main.ts"
+    "d6": "npx ts-node src/d6/main.ts",
+    "d8": "npx ts-node src/d8/main.ts"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
