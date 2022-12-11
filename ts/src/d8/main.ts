@@ -19,11 +19,34 @@ const isVisible = (
     return true;
   }
   const { height } = arr[rowIndex][colIndex];
-  const top = arr[rowIndex - 1][colIndex];
-  const bottom = arr[rowIndex + 1][colIndex];
-  const left = arr[rowIndex][colIndex - 1];
-  const right = arr[rowIndex][colIndex + 1];
-  return [top, bottom, left, right].some((tree) => tree.height < height);
+
+  const { left, right } = arr[rowIndex].reduce(
+    (acc, cur, index) => {
+      if (index < colIndex) {
+        return { ...acc, left: acc.left && cur.height < height };
+      } else if (index > colIndex) {
+        return { ...acc, right: acc.right && cur.height < height };
+      } else {
+        return acc;
+      }
+    },
+    { left: true, right: true },
+  );
+
+  const { top, bottom } = arr.reduce(
+    (acc, cur, index) => {
+      if (index < rowIndex) {
+        return { ...acc, top: acc.top && cur[colIndex].height < height };
+      } else if (index > rowIndex) {
+        return { ...acc, bottom: acc.bottom && cur[colIndex].height < height };
+      } else {
+        return acc;
+      }
+    },
+    { top: true, bottom: true },
+  );
+
+  return [left, right, top, bottom].includes(true);
 };
 
 // part 1
@@ -45,9 +68,9 @@ function p1(input: string) {
           visible: isVisible(arr, colIndex, rowIndex),
         })),
       ];
-    }, [] as Tree[][]);
-  // .flat()
-  // .filter((tree) => tree.visible).length;
+    }, [] as Tree[][])
+    .flat()
+    .filter((tree) => tree.visible).length;
 }
 
 // part 2
@@ -56,12 +79,12 @@ function p2(input: string) {
 }
 
 // run
-const input: string = readFileSync(__dirname + '/test.txt', {
+const input: string = readFileSync(__dirname + '/input.txt', {
   encoding: 'utf-8',
 });
 
 // part 1
-// ??
+// 1681
 console.log(p1(input));
 
 // part 2
