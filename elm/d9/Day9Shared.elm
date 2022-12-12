@@ -31,7 +31,7 @@ move ( Tail tail, Head head ) (Mov dir n) =
 
         moveTail : Vec2 -> Vec2 -> TailPosition
         moveTail newHeadVec newTailRelativeVec =
-            if V.distance tail newHeadVec > 2 then
+            if V.distance tail newHeadVec >= 2 then
                 Tail (V.add newHeadVec newTailRelativeVec)
 
             else

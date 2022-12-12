@@ -55,5 +55,5 @@ subscriptions _ =
 
 calculate : String -> OutputType
 calculate input =
-    -- ( ??, ?? )
+    -- ( 5960, ?? )
     ( Part1.run input, Part2.run input )

@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const input = fs.readFileSync("d9/test.txt", "utf-8");
+const input = fs.readFileSync("d9/input.txt", "utf-8");
 
 const Elm = require("./main").Elm;
 const main = Elm.Day9.init();

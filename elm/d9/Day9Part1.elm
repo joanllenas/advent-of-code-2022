@@ -7,14 +7,19 @@ import Shared
 
 
 applyMotions : Motion -> ( List TailPosition, List HeadPosition ) -> ( List TailPosition, List HeadPosition )
-applyMotions motion ( tails, heads ) =
-    case ( tails, heads ) of
-        ( t :: ts, h :: hs ) ->
-            Day9Shared.move ( t, h ) motion
-                |> Tuple.mapBoth (\tail -> tail :: t :: ts) (\head -> head :: h :: hs)
+applyMotions (Mov dir n) initialPosition =
+    List.range 0 (n - 1)
+        |> List.foldl
+            (\_ ( tails, heads ) ->
+                case ( tails, heads ) of
+                    ( t :: ts, h :: hs ) ->
+                        Day9Shared.move ( t, h ) (Mov dir (Shared.sign n * 1))
+                            |> Tuple.mapBoth (\tail -> tail :: t :: ts) (\head -> head :: h :: hs)
 
-        _ ->
-            ( tails, heads )
+                    _ ->
+                        ( tails, heads )
+            )
+            initialPosition
 
 
 run : String -> String
