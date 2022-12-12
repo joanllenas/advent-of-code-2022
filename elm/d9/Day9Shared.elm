@@ -1,22 +1,15 @@
-module Day9Shared exposing (Col(..), HeadPosition(..), Motion(..), Row(..), TailPosition(..), parseMovements)
+module Day9Shared exposing (HeadPosition(..), Motion(..), TailPosition(..), move, parseMovements)
 
+import Math.Vector2 as V exposing (Vec2)
 import Parser as P exposing ((|.), (|=), DeadEnd, Parser, Step(..))
 
 
-type Row
-    = Row Int
-
-
-type Col
-    = Col Int
-
-
 type HeadPosition
-    = Head Col Row
+    = Head Vec2
 
 
 type TailPosition
-    = Tail Col Row
+    = Tail Vec2
 
 
 type Dir
@@ -27,7 +20,39 @@ type Dir
 
 
 type Motion
-    = Motion Dir Int
+    = Mov Dir Int
+
+
+move : ( TailPosition, HeadPosition ) -> Motion -> ( TailPosition, HeadPosition )
+move ( Tail tail, Head head ) (Mov dir n) =
+    let
+        incr =
+            toFloat n
+
+        moveTail : Vec2 -> Vec2 -> TailPosition
+        moveTail newHeadVec newTailRelativeVec =
+            if V.distance tail newHeadVec > 2 then
+                Tail (V.add newHeadVec newTailRelativeVec)
+
+            else
+                Tail tail
+    in
+    case dir of
+        Left ->
+            V.add (V.vec2 -incr 0) head
+                |> (\newHeadVec -> ( moveTail newHeadVec (V.vec2 1 0), Head newHeadVec ))
+
+        Right ->
+            V.add (V.vec2 incr 0) head
+                |> (\newHeadVec -> ( moveTail newHeadVec (V.vec2 -1 0), Head newHeadVec ))
+
+        Up ->
+            V.add (V.vec2 0 incr) head
+                |> (\newHeadVec -> ( moveTail newHeadVec (V.vec2 0 -1), Head newHeadVec ))
+
+        Down ->
+            V.add (V.vec2 0 -incr) head
+                |> (\newHeadVec -> ( moveTail newHeadVec (V.vec2 0 1), Head newHeadVec ))
 
 
 motionsParser : Parser (List Motion)
@@ -50,7 +75,7 @@ motionsParser =
 
 motionParser : Parser Motion
 motionParser =
-    P.succeed Motion
+    P.succeed Mov
         |= directionParser
         |. P.spaces
         |= P.int
