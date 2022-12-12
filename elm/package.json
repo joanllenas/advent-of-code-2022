@@ -13,7 +13,9 @@
     "pred5": "elm make d5/Day5.elm --output=d5/main.js",
     "d5": "node d5/cli.js",
     "pred7": "elm make d7/Day7.elm --output=d7/main.js",
-    "d7": "node d7/cli.js"
+    "d7": "node d7/cli.js",
+    "pred9": "elm make d9/Day9.elm --output=d9/main.js",
+    "d9": "node d9/cli.js"
   },
   "keywords": [],
   "author": "",
